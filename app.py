@@ -7,6 +7,13 @@ df = pd.read_html('https://docs.google.com/spreadsheets/d/1UCrSZrIX45MlKz6EQfEVJ
 
 df = df[[col for col in df.columns if 'Unnamed' not in col and col != '1']]
 
+mapping = {
+    "What is your quad?": "Quad",
+    "What is your kerb (no @mit.edu)?": "Kerb",
+    "What event?": "Event"
+}
+
+df = df.rename(columns=mapping)
 
 events = ['All'] + sorted(list(df['Event'].dropna().unique()))
 events = st.multiselect('Event', options=events, default=['All'])
