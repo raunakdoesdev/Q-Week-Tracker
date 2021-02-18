@@ -40,7 +40,7 @@ df['Kerb'] = 'bottom text'
 quad_groups = df.groupby('Quad')
 for quad, group in sorted(quad_groups, key=lambda x: str(x[1]['Quad'])):
     
-    points_df = group.groupby('Event').agg('min')
+    points_df = group.groupby('Event').agg('max')
     event_names = points_df.index.values
     puntos = [int(i)/int(j)*400 for i, j in zip(points_df['Participation'].to_list(), points_df['Quad Total'].to_list())]
     display_df = {'Event Name': event_names, 'Attendance Points': puntos}
