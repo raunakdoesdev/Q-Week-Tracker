@@ -43,7 +43,9 @@ for quad, group in sorted(quad_groups, key=lambda x: str(x[1]['Quad'])):
     for event_name in event_names:
         if event_name in five_hundred_puntos:
             puntos[list(event_names).index(event_name)] *= 5/4 
-        display_df = {'Event Name': event_names, 'Attendance Points': puntos}
+        if event_name == '2/18: Wikipedia Game':
+            puntos[list(event_names).index('2/18: Wikipedia Game')] = 400
+    display_df = {'Event Name': event_names, 'Attendance Points': puntos}
 
     f'### {quad}'
     f"**Total Points**: {format(sum(puntos),'.2f')}"
