@@ -37,19 +37,29 @@ quad_groups = df.groupby('Quad')
 for quad, group in sorted(quad_groups, key=lambda x: str(x[1]['Quad'])):
     
     points_df = group.groupby('Event').agg('min')
-    event_names = points_df.index.values
+    event_names = list(points_df.index.values)
     puntos = [int(i)/int(j)*400 for i, j in zip(points_df['Participation'].to_list(), points_df['Quad Total'].to_list())]
     five_hundred_puntos = ['Quad Intro Video', 'Photo Contest', 'Door Tag Contest', 'COVID Friends Design Contest', 'Meme Contest', 'Outfit Photo']
     for event_name in event_names:
         if event_name in five_hundred_puntos:
-            puntos[list(event_names).index(event_name)] *= 5/4 
+            puntos[event_names.index(event_name)] *= 5/4 
         if event_name == '2/18: Wikipedia Game':
-            puntos[list(event_names).index('2/18: Wikipedia Game')] = 400
-    display_df = {'Event Name': event_names, 'Attendance Points': puntos}
+            puntos[event_names.index('2/18: Wikipedia Game')] = 400
+        if quad == 'SITE SQU4D':
+            try:
+                puntos[event_names.index('2/18: Wikipedia Game')] = 600
+            except ValueError:
+                event_names.append('2/18: Wikipedia Game')
+                puntos.append(600)
+        if quad == 'Unicorms':
+            puntos[event_names.index('2/18: Wikipedia Game')] = 600
+        if quad == 'Baby Quad':
+            puntos[event_names.index('2/18: Wikipedia Game')] = 600
+    display_df = {'Event Name': event_names, 'Points Earned': puntos}
 
     f'### {quad}'
     f"**Total Points**: {format(sum(puntos),'.2f')}"
 
     display_df = pd.DataFrame(display_df)
-    display_df = display_df.sort_values(by=['Attendance Points'], ascending=False).reset_index(drop=True)
+    display_df = display_df.sort_values(by=['Points Earned'], ascending=False).reset_index(drop=True)
     st.table(display_df)
